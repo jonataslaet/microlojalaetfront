@@ -37,6 +37,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                 case 403:
                     this.handleErro403();
                 break;
+
+                default:
+                    this.handleDefaultErro(erro);
+                break;
             }
 
             return Observable.throw(erro);   
@@ -59,6 +63,20 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     handleErro403(){
         this.storage.setLocalUser(null);
+    }
+
+    handleDefaultErro(erro){
+        let alert = this.alertCtrl.create({
+            title: 'Error '+erro.status+': '+erro.error,
+            message: erro.message,
+            enableBackdropDismiss: false,
+            buttons: [
+                {
+                    text: 'Ok'
+                }
+            ]
+        });
+        alert.present();
     }
 }
 
