@@ -5,13 +5,17 @@ import { CredenciaisDTO } from "../models/credenciais.dto";
 import { StorageService } from "./storage.service";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { LocalUser } from "../models/local_user";
+import { CartService } from "./domain/cart.service";
 
 @Injectable()
 export class AuthService {
 
     jwtHelper: JwtHelperService = new JwtHelperService();
 
-    constructor(public http: HttpClient, public storage: StorageService){
+    constructor(
+        public http: HttpClient, 
+        public storage: StorageService,
+        public cartService : CartService){
 
     }
     
@@ -36,6 +40,7 @@ export class AuthService {
         };
         console.log(user);
         this.storage.setLocalUser(user);
+        this.cartService.createOrClearCart();
     }
 
     refreshToken(){
