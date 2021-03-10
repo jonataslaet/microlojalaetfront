@@ -60,4 +60,8 @@ export class CartPage {
   continuarComprando(){
     this.navCtrl.setRoot('CategoriasPage');
   }
+
+  checkout(){
+    this.navCtrl.setRoot('PickAddressPage');
+  }
 }
