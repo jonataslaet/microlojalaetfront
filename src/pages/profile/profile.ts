@@ -6,12 +6,6 @@ import { ClienteDTO } from '../../models/cliente.dto';
 import { ClienteService } from '../../services/domain/cliente.service';
 import { StorageService } from '../../services/storage.service';
 
-/**
- * Generated class for the ProfilePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -33,6 +27,10 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
+    this.loadData();
+  }
+
+  loadData(){
     let localUser = this.storage.getLocalUser();
     if (localUser && localUser.email){
       this.clienteService.findByEmail(localUser.email).subscribe(
@@ -70,10 +68,28 @@ export class ProfilePage {
       mediaType: this.camera.MediaType.PICTURE
     }
     
-    this.camera.getPicture(options).then((imageData) => {
-     this.picture = 'data:image/png;base64,' + imageData;
-     this.cameraOn = false;
-    }, (err) => {
+    this.camera.getPicture(options)
+    .then((imageData) => {
+      this.picture = 'data:image/png;base64,' + imageData;
+      this.cameraOn = false;
+    }, 
+    (err) => {
     });
+  }
+
+  sendPicture(){
+    this.clienteService.uploadPicture(this.picture).subscribe(
+      response => {
+        // this.picture = null;
+        this.loadData();
+      },
+      error => {
+
+      }
+    );
+  }
+
+  cancel(){
+    this.picture = null;
   }
 }
